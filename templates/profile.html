@@ -1,0 +1,53 @@
+{% extends "flask_user_layout.html" %}
+{% block content %}
+<div class="container">
+    
+    <h2>Profile</h2>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <b>Personal info</b>
+            <button id="infoEditButton">Edit</button>
+            <button id="infoSubmitButton" style="display:none;">Submit</button>
+        </div>
+        <div class="panel-body">
+            <div>
+                <label for="firstName">First name:</label>
+                <input type="text" id="firstName" value="{{user.first_name}}" disabled="true">
+              </div>
+              <div>
+                <label for="lastName">Last name:</label>
+                <input type="text" id="lastName" value="{{user.last_name}}" disabled="true">
+              </div>
+              <div>
+                <label for="username">Username:</label>
+                <input type="text" id="username" value="{{user.username}}" disabled="true">
+              </div>
+              <span id="infoEditMessage" class="label label-default" disabled="true"></span>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <b>Favorite genres</b>
+            <button id="favsEditButton">Edit</button>
+            <button id="favsSubmitButton" style="display:none;">Submit</button>
+        </div>
+        <div class="panel-body">
+            {% for g in genres %}
+              <label for="{{g.name}}">{{g.name}}:</label>
+              {% if genres[g] %}
+                <input type="checkbox" class="favsCheckBox" id="{{g.name}}" disabled="true" checked >
+              {% else %}
+                <input type="checkbox" class="favsCheckBox" id="{{g.name}}" disabled="true">
+              {% endif %}
+            {% endfor %}
+            <span id="favsEditMessage" class="label label-default" disabled="true"></span>
+        </div>
+    </div>
+
+</div>
+
+<script src="{{ url_for('static',filename='scripts/profile.js') }}"></script>
+
+{% endblock %}

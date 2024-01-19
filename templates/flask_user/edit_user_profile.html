@@ -1,0 +1,50 @@
+{% extends 'flask_user/_authorized_base.html' %}
+
+{% block content %}
+{% from "flask_user/_macros.html" import render_field, render_checkbox_field, render_submit_field %}
+<h1>{%trans%}User profile{%endtrans%}</h1>
+
+<form action="" method="POST" class="form" role="form">
+    {{ form.hidden_tag() }}
+    {% for field in form %}
+        {% if not field.flags.hidden %}
+            {% if field.type=='SubmitField' %}
+                {{ render_submit_field(field, tabindex=loop.index*10) }}
+            {% else %}
+                {{ render_field(field, tabindex=loop.index*10) }}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</form>
+<br/>
+
+{% if not user_manager.USER_ENABLE_AUTH0 %}
+    {% if user_manager.USER_ENABLE_CHANGE_USERNAME %}
+        <p><a href="{{ url_for('user.change_username') }}">{%trans%}Change username{%endtrans%}</a></p>
+    {% endif %}
+    {% if user_manager.USER_ENABLE_CHANGE_PASSWORD %}
+        <p><a href="{{ url_for('user.change_password') }}">{%trans%}Change password{%endtrans%}</a></p>
+    {% endif %}
+{% endif %}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <b>Favorite genres</b>
+        <button id="favsEditButton">Edit</button>
+        <button id="favsSubmitButton" style="display:none;">Submit</button>
+    </div>
+    <div class="panel-body">
+        {% for g in genres %}
+          <label for="{{g.name}}">{{g.name}}:</label>
+          {% if genres[g] %}
+            <input type="checkbox" class="favsCheckBox" id="{{g.name}}" disabled="true" checked >
+          {% else %}
+            <input type="checkbox" class="favsCheckBox" id="{{g.name}}" disabled="true">
+          {% endif %}
+        {% endfor %}
+        <span id="favsEditMessage" class="label label-default" disabled="true"></span>
+    </div>
+</div>
+<script src="{{ url_for('static',filename='scripts/profile.js') }}"></script>
+
+{% endblock %}
