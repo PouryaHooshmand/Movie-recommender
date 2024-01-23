@@ -1,0 +1,163 @@
+/* Body styles */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f8f8;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+
+/* Header link styles */
+#header-div a {
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Header link hover styles */
+#header-div a:hover {
+    text-decoration: underline;
+    color: #d9edf7; /* Change to a slightly different color on hover if needed */
+}
+
+
+/* Header styles */
+#header-div {
+    background-color: #428bca;
+    color: #fff;
+    padding: 10px;
+}
+
+#header-div h1 {
+    margin: 0;
+}
+
+#menu-div {
+    background-color: #eee;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* Main content styles */
+#main-div {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #428bca;
+}
+
+
+#search-input {
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 10px;
+}
+
+#search-button {
+
+    background-color: #ffffff;
+    color: #000000;
+    font-size: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+
+/* Footer styles */
+#footer-div {
+    background-color: #eee;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+/* Responsive styles */
+@media (max-width: 767px) {
+    #header-div, #menu-div, #main-div, #footer-div {
+        margin: 0;
+    }
+
+    #search-input {
+        width: 100%;
+    }
+}
+
+/* Custom styles for movie grid with Flexbox */
+.movie-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Adjust as needed */
+    margin-top: 20px;
+}
+
+.panel {
+    width: calc(33.33% - 20px); /* Adjust margin as needed */
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+/* Select every third panel and clear its left margin to start a new row */
+.panel:nth-child(3n + 1) {
+    margin-left: 0;
+}
+
+
+.panel-heading {
+    background-color: #428bca;
+    color: #fff;
+    padding: 10px;
+}
+
+.panel-body {
+    padding: 15px;
+}
+
+.panel-footer {
+    margin-top: auto;
+    background-color: #f5f5f5;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Label styles */
+.label {
+    margin-right: 5px;
+}
+
+/* Link styles */
+.label a {
+    color: #333; /* Link color */
+    text-decoration: none;
+}
+
+.label a:hover {
+    text-decoration: underline;
+}
+
+/* Rating link styles */
+.rating-link {
+    color: #428bca;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.rating-link:hover {
+    text-decoration: underline;
+}
+
+/* Disable pointer events for the last rated star */
+.rated-link {
+    pointer-events: none;
+    color: black;
+    text-decoration: none;
+    font-weight: bold;
+}
