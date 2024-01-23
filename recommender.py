@@ -88,10 +88,15 @@ def results_page():
     ratings = {}
     for m in movies:
         rating = [r.rating for r in m.ratings]
-        if rating:
-            ratings[m] = (len(rating), round(sum(rating)/len(rating),1))
+        user_rating = [r.rating for r in m.ratings if r.user_id==current_user.id]
+        if user_rating:
+            user_rating = user_rating[0]
         else:
-            ratings[m] = (0,0)
+            user_rating = 0
+        if rating:
+            ratings[m] = (len(rating), round(sum(rating)/len(rating),1), user_rating)
+        else:
+            ratings[m] = (0,0,0)
     return render_template("movies.html", movies=ratings)
 
 
@@ -138,10 +143,15 @@ def movies_page():
         common_genres = [len([g.genre_id for g in m.genres if g.genre_id in fav_genres]) for m in movies]
         for m in movies:
             rating = [r.rating for r in m.ratings]
-            if rating:
-                ratings[m] = (len(rating), round(sum(rating)/len(rating),1))
+            user_rating = [r.rating for r in m.ratings if r.user_id==current_user.id]
+            if user_rating:
+                user_rating = user_rating[0]
             else:
-                ratings[m] = (0,0)
+                user_rating = 0
+            if rating:
+                ratings[m] = (len(rating), round(sum(rating)/len(rating),1), user_rating)
+            else:
+                ratings[m] = (0,0,0)
 
         common_genres, ratings = zip(*sorted(zip(common_genres,ratings.items()), key= lambda i:i[1][1][1], reverse=True))
         ratings = dict([x for _, x in sorted(zip(common_genres,ratings), key= lambda i:i[0], reverse=True)])
