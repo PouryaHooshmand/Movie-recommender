@@ -46,6 +46,11 @@
     {% block menu %}
     <div id="menu-div" class="with-margins">
         <a href='{{ url_for('home_page') }}'>{%trans%}Home page{%endtrans%}</a>
+        <div id="search-container">
+            <input type="text" id="search-input" onkeyup="enableButton()" placeholder="Enter movie name">
+            <button id="search-button" onclick="search()" disabled>Search</button>
+        </div>
+        <script src="{{ url_for('static',filename='scripts/search.js') }}"></script>
     </div>
     {% endblock %}
     <hr class="no-margins"/>
