@@ -1,11 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const ratingLinks = document.querySelectorAll(".rating-link");
+    const ratingLinks = document.querySelectorAll(".rating-link, .rated-link");
 
     ratingLinks.forEach(function(link) {
       link.addEventListener('click', function() {
         // Print the id of the clicked element
-        var movie_id = link.classList.item(1).substring(1);
-        var rating = link.classList.item(2).substring(1);
+        var movie_id = link.classList.item(0).substring(1);
+        var rating = link.classList.item(1).substring(1);
 
         fetch("rate", {
           method: "POST",
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
           movieRatedLinks.forEach(function(rlink) {
             rlink.classList.add("rating-link");
             rlink.classList.remove("rated-link");
-            rlink.style.cssText = "";
+            rlink.removeAttribute("style");
           });
         })
         .catch(error => {

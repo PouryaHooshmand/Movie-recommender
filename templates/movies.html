@@ -31,9 +31,9 @@
                 <div class="panel-footer">Rate:
                     {% for i in range(5) %}
                     {% if movies[m][2]==i+1 %}
-                    <a href="javascript:;" class="rated-link m{{m.id}} r{{i+1}}" style="pointer-events: none; color: black;text-decoration: none;font-weight: bold;">{{i+1}}</a>
+                    <a href="javascript:;" class="m{{m.id}} r{{i+1}} rated-link" style="pointer-events: none; color: black;text-decoration: none;font-weight: bold;">{{i+1}}</a>
                     {% else %}
-                    <a href="javascript:;" class="rating-link m{{m.id}} r{{i+1}}">{{i+1}}</a>
+                    <a href="javascript:;" class="m{{m.id}} r{{i+1}} rating-link">{{i+1}}</a>
                     {% endif %}
                     {% endfor %} Stars
                 </div>
