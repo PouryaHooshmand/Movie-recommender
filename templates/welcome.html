@@ -29,4 +29,5 @@
 </div>
 <button id="submitButton" disabled>Submit</button>
 <script src="{{ url_for('static',filename='scripts/welcome.js') }}"></script>
+<script type="text/javascript"> setHomePage('{{url_for("home_page")}}');</script>
 {% endblock %}

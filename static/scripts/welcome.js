@@ -1,3 +1,5 @@
+let homePage;
+
 document.addEventListener("DOMContentLoaded", function () {
     const submitButton = document.getElementById("submitButton");
     const favsCheckBox = document.getElementsByClassName("favsCheckBox");
@@ -37,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error("Error:", error);
       })
       .finally(() => {
-        window.location.replace("/");
+        window.location.replace(homePage);
       });
       
       });
@@ -49,4 +51,8 @@ function enableButton() {
        } else { 
            document.getElementById('submitButton').disabled = false;
        }
+}
+
+function setHomePage(text) {
+    homePage = text;
 }
