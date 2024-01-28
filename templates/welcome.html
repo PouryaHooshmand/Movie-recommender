@@ -1,0 +1,32 @@
+{% extends "flask_user_layout.html" %}
+{% block content %}
+
+<h1>Welcome {{user.username}}!</h1>
+<h2>Lets get started</h2>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <b>What is your name?</b>
+    </div>
+    <div class="panel-body">
+        <input type="text" id="fname-input" onkeyup="enableButton()" placeholder="First name">
+        <input type="text" id="lname-input" onkeyup="enableButton()" placeholder="Last name">
+    </div>
+</div>
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <b>Favorite genres</b>
+    </div>
+    <div class="panel-body">
+        {% for g in genres %}
+          <label for="{{g.name}}">{{g.name}}:</label>
+          <input type="checkbox" class="favsCheckBox" id="{{g.name}}">
+        {% endfor %}
+        <span id="favsEditMessage" class="label label-default" disabled="true"></span>
+    </div>
+</div>
+<button id="submitButton" disabled>Submit</button>
+<script src="{{ url_for('static',filename='scripts/welcome.js') }}"></script>
+{% endblock %}

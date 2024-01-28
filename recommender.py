@@ -1,6 +1,6 @@
 # Contains parts from: https://flask-user.readthedocs.io/en/latest/quickstart_app.html
 
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 from flask_user import login_required, UserManager, current_user
 
 from models import db, User, Movie, MovieGenre, FavoriteGenres, Genre, Rating
@@ -54,9 +54,9 @@ class ConfigClass(object):
     USER_ENABLE_USERNAME = True  # Enable username authentication
     USER_REQUIRE_RETYPE_PASSWORD = True  # Simplify register form
 
-    USER_AFTER_REGISTER_ENDPOINT = 'home_page'
-    USER_AFTER_CONFIRM_ENDPOINT = 'home_page'
-    USER_AFTER_LOGIN_ENDPOINT = 'home_page'
+    USER_AFTER_REGISTER_ENDPOINT = 'welcome_page'
+    USER_AFTER_CONFIRM_ENDPOINT = 'welcome_page'
+    USER_AFTER_LOGIN_ENDPOINT = 'welcome_page'
     USER_AFTER_LOGOUT_ENDPOINT = 'home_page'
 
 # Create Flask app
@@ -79,6 +79,15 @@ def initdb_command():
 def home_page():
     # render home.html template
     return render_template("home.html")
+
+@app.route("/welcome")
+@login_required
+def welcome_page():
+    if current_user.first_name or current_user.last_name or FavoriteGenres.query.filter(FavoriteGenres.user_id==current_user.id).all():
+        return redirect(url_for('home_page'))
+    
+    genres = Genre.query.all()
+    return render_template("welcome.html", user=current_user, genres = genres[:-1])
 
 @app.route("/search")
 @login_required
@@ -211,6 +220,22 @@ def update_favs():
                 db.session.delete(fav_genre_entry)
     db.session.commit()
     return {'message':'Favorites updated successfully'}, 200
+
+@app.route('/set_user_profile', methods=['POST'])
+@login_required
+def set_user_profile():
+    data = request.get_json()
+    current_user.first_name = data["first_name"]
+    current_user.last_name = data["last_name"]
+    data.pop('first_name', None)
+    data.pop('last_name', None)
+    for g in data:
+        if data[g]:
+            genre = Genre.query.filter(Genre.name==g).first()
+            new_fav = FavoriteGenres(user_id=current_user.id, genre_id = genre.id, genre = genre)
+            db.session.add(new_fav)
+    db.session.commit()
+    return {'message':'profile updated successfully'}, 200
 
 
 @app.route('/rate', methods=['POST'])
