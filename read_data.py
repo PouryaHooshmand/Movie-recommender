@@ -25,7 +25,7 @@ def check_and_read_data(db):
                     try:
                         id = row[0]
                         title = row[1]
-                        movie = Movie(id=id, title=title)
+                        movie = Movie(id=id, title=title, rating_sum=0)
                         db.session.add(movie)
                         genres = row[2].split('|')  # genres is a list of genres
                         for genre in genres:  # add each genre to the movie_genre table
@@ -78,6 +78,8 @@ def check_and_read_data(db):
                             db.session.add(user)
                             db.session.commit()
                         rating = Rating(user_id=user_id, movie_id=movie_id, rating=rating_value)
+                        movie = Movie.query.get(movie_id)
+                        movie.rating_sum +=int(float(rating_value))
                         db.session.add(rating)
                         db.session.commit()  # save data to database
                     except IntegrityError:

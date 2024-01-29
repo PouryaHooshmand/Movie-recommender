@@ -2,10 +2,113 @@
 {% block content %}
     <h2>Home page</h2>
 
-    <p><a href={{ url_for('home_page') }}>Home page</a> (accessible to anyone)</p>
-    <p><a href={{ url_for('movies_page') }}>Movies</a> (login required)</p>
-    <p><a href={{ url_for('rated_movies_page') }}>Rated movies</a> (login required)</p>
-    <p><a href={{ url_for('user.logout') }}>Sign out</a></p>
+
+    <div class="container">
+        <h2>Top movies</h2>
+    
+        <div class="movie-container">
+            {% for m in top_movies %}
+                <div class="panel panel-default">
+                    <div class="panel-heading"><b>{{ m.title }}</b></div>
+                    <div class="panel-body">
+                        <p> Rating: {{top_movies[m][1]}}/5 from {{top_movies[m][0]}} users</p>
+                        <p> Genres:
+                            {% for g in m.genres %}
+                                <span class="label label-default">{{ g.genre.name }}</span>
+                            {% endfor %}
+                        </p>
+                        <p> Links:
+                            {% if m.link[0].imdb_id %}
+                            <span class="label label-default"><a href="https://www.imdb.com/title/tt{{ m.link[0].imdb_id }}" target="_blank">IMDB</a></span>
+                            {% endif %}
+                            {% if m.link[0].tmdb_id %}
+                            <span class="label label-default"><a href="https://www.themoviedb.org/movie/{{ m.link[0].tmdb_id }}" target="_blank">TMDB</a></span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="panel panel-default panel-more">
+                <div class="panel-body">
+                    <a href={{ url_for('movies_page') }}>Show more</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if top_cat_movies %}
+    <div class="container">
+        <h2>Top movies from favorite categories</h2>
+    
+        <div class="movie-container">
+            {% for m in top_cat_movies %}
+                <div class="panel panel-default">
+                    <div class="panel-heading"><b>{{ m.title }}</b></div>
+                    <div class="panel-body">
+                        <p> Rating: {{top_cat_movies[m][1]}}/5 from {{top_cat_movies[m][0]}} users</p>
+                        <p> Genres:
+                            {% for g in m.genres %}
+                                <span class="label label-default">{{ g.genre.name }}</span>
+                            {% endfor %}
+                        </p>
+                        <p> Links:
+                            {% if m.link[0].imdb_id %}
+                            <span class="label label-default"><a href="https://www.imdb.com/title/tt{{ m.link[0].imdb_id }}" target="_blank">IMDB</a></span>
+                            {% endif %}
+                            {% if m.link[0].tmdb_id %}
+                            <span class="label label-default"><a href="https://www.themoviedb.org/movie/{{ m.link[0].tmdb_id }}" target="_blank">TMDB</a></span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="panel panel-default panel-more">
+                <div class="panel-body">
+                    <a href={{ url_for('movies_page') }}>Show more</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif%}
+
+    {% if rated_movies %}
+    <div class="container">
+        <h2>Last rated movies</h2>
+    
+        <div class="movie-container">
+            {% for m in rated_movies %}
+                <div class="panel panel-default">
+                    <div class="panel-heading"><b>{{ m.title }}</b></div>
+                    <div class="panel-body">
+                        <p> Rating: {{rated_movies[m][1]}}/5 from {{rated_movies[m][0]}} users</p>
+                        <p> Genres:
+                            {% for g in m.genres %}
+                                <span class="label label-default">{{ g.genre.name }}</span>
+                            {% endfor %}
+                        </p>
+                        <p> Links:
+                            {% if m.link[0].imdb_id %}
+                            <span class="label label-default"><a href="https://www.imdb.com/title/tt{{ m.link[0].imdb_id }}" target="_blank">IMDB</a></span>
+                            {% endif %}
+                            {% if m.link[0].tmdb_id %}
+                            <span class="label label-default"><a href="https://www.themoviedb.org/movie/{{ m.link[0].tmdb_id }}" target="_blank">TMDB</a></span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="panel panel-default panel-more">
+                <div class="panel-body">
+                    <a href={{ url_for('rated_movies_page') }}>Show more</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    {% endif %}
+
+
 
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/home.css') }}">
 {% endblock %}

@@ -77,8 +77,33 @@ def initdb_command():
 # The Home page is accessible to anyone
 @app.route('/')
 def home_page():
+    is_logged_in = isinstance(current_user, User)
+    top_movies = {}
+    movies = Movie.query.order_by(Movie.rating_sum.desc()).limit(5).all()
+    for m in movies:
+        rating = [r.rating for r in m.ratings]
+        if rating:
+            top_movies[m] = (len(rating), round(sum(rating)/len(rating),1))
+    top_cat_movies = {}
+    rated_movies = {}
+    if is_logged_in:
+        
+        fav_genres = [g.genre_id for g in FavoriteGenres.query.filter(FavoriteGenres.user_id==current_user.id).all()]
+        
+        
+        if fav_genres:
+            movies = Movie.query.join(MovieGenre).filter(MovieGenre.genre_id.in_(fav_genres)).distinct().order_by(Movie.rating_sum.desc()).limit(5).all()
+            for m in movies:
+                rating = [r.rating for r in m.ratings]
+                if rating:
+                    top_cat_movies[m] = (len(rating), round(sum(rating)/len(rating),1))
+        
+        movies = list(reversed([Movie.query.get(mid) for mid in [r.movie_id for r in current_user.ratings]]))
+        for m in movies[:5]:
+            rating = [r.rating for r in m.ratings]
+            rated_movies[m] = (len(rating), round(sum(rating)/len(rating),1))
     # render home.html template
-    return render_template("home.html")
+    return render_template("home.html", top_movies = top_movies, top_cat_movies = top_cat_movies, rated_movies = rated_movies)
 
 @app.route("/welcome")
 @login_required
@@ -148,7 +173,7 @@ def movies_page():
                 if i>=50:
                     break
     else:
-        movies = Movie.query.filter(Movie.genres.any(MovieGenre.genre_id.in_(fav_genres))).limit(10).all()
+        movies = Movie.query.join(MovieGenre).filter(MovieGenre.genre_id.in_(fav_genres)).distinct().limit(10).all()
         common_genres = [len([g.genre_id for g in m.genres if g.genre_id in fav_genres]) for m in movies]
         for m in movies:
             rating = [r.rating for r in m.ratings]
@@ -243,12 +268,16 @@ def set_user_profile():
 def rate_movie():
     data = request.get_json()
     movie_id = int(data['movie_id'])
+    movie = Movie.query.get(movie_id)
     rating = int(data['rating'])
     movie_prev_rating = Rating.query.filter(Rating.user_id==current_user.id).filter(Rating.movie_id==movie_id).first()
 
     if movie_prev_rating:
+        movie.rating_sum -= movie_prev_rating.rating
         db.session.delete(movie_prev_rating)
+
     new_rating = Rating(user_id=current_user.id, movie_id=movie_id, rating=rating)
+    movie.rating_sum += new_rating.rating
     db.session.add(new_rating)
     db.session.commit()
 

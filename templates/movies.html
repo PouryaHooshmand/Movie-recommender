@@ -39,6 +39,14 @@
                 </div>
             </div>
         {% endfor %}
+
+        <div class="panel panel-default panel-more">
+            <div class="panel-body">
+                <a onClick="window.location.reload();"><h2>Refresh</h2></a>
+            </div>
+            
+        </div>
+        
     </div>
 </div>
 <script src="{{ url_for('static',filename='scripts/movies.js') }}"></script>

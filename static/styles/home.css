@@ -13,3 +13,41 @@ h2 {
 }
 
 
+/* Custom styles for movie grid with Flexbox */
+.movie-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Adjust as needed */
+    margin-top: 20px;
+}
+
+.panel {
+    width: calc(16.66% - 20px); /* Adjust margin as needed */
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.panel-more {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Select every third panel and clear its left margin to start a new row */
+.panel:nth-child(6n + 1) {
+    margin-left: 0;
+}
+
+
+.panel-heading {
+    background-color: #428bca;
+    color: #fff;
+    padding: 10px;
+}
+
+.panel-body {
+    padding: 15px;
+}

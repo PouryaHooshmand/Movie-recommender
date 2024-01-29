@@ -33,6 +33,7 @@ class Movie(db.Model):
     link = db.relationship('Link', backref='movie', lazy=True) #added
     tags = db.relationship('Tag', backref='movie', lazy=True) #added
     ratings = db.relationship('Rating', backref='movie', lazy=True)
+    rating_sum = db.Column(db.Integer)
 
 class Genre(db.Model):
     __tablename__ = 'genres'

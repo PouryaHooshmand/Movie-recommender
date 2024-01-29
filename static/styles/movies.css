@@ -121,6 +121,12 @@ h2 {
     padding: 15px;
 }
 
+.panel-more {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .panel-footer {
     margin-top: auto;
     background-color: #f5f5f5;
