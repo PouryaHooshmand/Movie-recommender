@@ -17,12 +17,12 @@ h2 {
 .movie-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between; /* Adjust as needed */
+    justify-content: space-between;
     margin-top: 20px;
 }
 
 .panel {
-    width: calc(16.66% - 20px); /* Adjust margin as needed */
+    width: calc(16.66% - 20px);
     margin-bottom: 20px;
     box-sizing: border-box;
     display: flex;
@@ -36,7 +36,7 @@ h2 {
     align-items: center;
 }
 
-/* Select every third panel and clear its left margin to start a new row */
+/* Select every sixth panel and clear its left margin to start a new row */
 .panel:nth-child(6n + 1) {
     margin-left: 0;
 }

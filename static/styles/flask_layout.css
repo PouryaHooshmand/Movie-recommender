@@ -25,7 +25,7 @@ hr {
 /* Header link hover styles */
 #header-div a:hover {
     text-decoration: underline;
-    color: #d9edf7; /* Change to a slightly different color on hover if needed */
+    color: #d9edf7;
 }
 
 

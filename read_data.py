@@ -13,10 +13,8 @@ def check_and_read_data(db):
         db.session.commit()
 
 
-    # check if we have movies in the database
-    # read data if database is empty
+
     if Movie.query.count() == 0:
-        # read movies from csv
         with open('data/movies.csv', newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             count = 0
@@ -27,11 +25,11 @@ def check_and_read_data(db):
                         title = row[1]
                         movie = Movie(id=id, title=title, rating_sum=0)
                         db.session.add(movie)
-                        genres = row[2].split('|')  # genres is a list of genres
-                        for genre in genres:  # add each genre to the movie_genre table
+                        genres = row[2].split('|')
+                        for genre in genres:
                             movie_genre = MovieGenre(movie_id=id, genre_id=Genre.query.filter_by(name=genre).first().id, genre = Genre.query.filter_by(name=genre).first())
                             db.session.add(movie_genre)
-                        db.session.commit()  # save data to database
+                        db.session.commit()
                     except IntegrityError:
                         print("Ignoring duplicate movie: " + title)
                         db.session.rollback()
@@ -41,7 +39,6 @@ def check_and_read_data(db):
                     print(count, " movies read")
 
     if Link.query.count() == 0:
-        # read links from csv
         with open('data/links.csv', newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             count = 0
@@ -53,7 +50,7 @@ def check_and_read_data(db):
                         tmdb_id = row[2]
                         link = Link(movie_id=movie_id, imdb_id=imdb_id, tmdb_id=tmdb_id)
                         db.session.add(link)
-                        db.session.commit()  # save data to database
+                        db.session.commit()
                     except IntegrityError:
                         print("Ignoring duplicate link for movie: " + str(movie_id))
                         db.session.rollback()
@@ -63,7 +60,6 @@ def check_and_read_data(db):
                     print(count, "links read")
 
     if Rating.query.count() == 0:
-        # read links from csv
         with open('data/ratings.csv', newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             count = 0
@@ -81,7 +77,7 @@ def check_and_read_data(db):
                         movie = Movie.query.get(movie_id)
                         movie.rating_sum +=int(float(rating_value))
                         db.session.add(rating)
-                        db.session.commit()  # save data to database
+                        db.session.commit()
                     except IntegrityError:
                         print(f"Ignoring duplicate rating for movie {movie_id} and user {user_id}.")
                         db.session.rollback()
@@ -91,7 +87,6 @@ def check_and_read_data(db):
                     print(count, "ratings read")
     
     if Tag.query.count() == 0:
-        # read links from csv
         with open('data/tags.csv', newline='', encoding='utf8') as csvfile:
             reader = csv.reader(csvfile, delimiter=',')
             count = 0
@@ -107,7 +102,7 @@ def check_and_read_data(db):
                             db.session.commit()
                         tag = Tag(user_id=user_id, movie_id=movie_id, tag=tg)
                         db.session.add(tag)
-                        db.session.commit()  # save data to database
+                        db.session.commit()
                     except IntegrityError:
                         print("Ignoring duplicate tag for movie: " + str(movie_id))
                         db.session.rollback()

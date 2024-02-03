@@ -17,7 +17,7 @@ body {
 /* Header link hover styles */
 #header-div a:hover {
     text-decoration: underline;
-    color: #d9edf7; /* Change to a slightly different color on hover if needed */
+    color: #d9edf7;
 }
 
 
@@ -92,12 +92,12 @@ h2 {
 .movie-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between; /* Adjust as needed */
+    justify-content: space-between;
     margin-top: 20px;
 }
 
 .panel {
-    width: calc(33.33% - 20px); /* Adjust margin as needed */
+    width: calc(33.33% - 20px);
     margin-bottom: 20px;
     box-sizing: border-box;
     display: flex;
@@ -141,7 +141,7 @@ h2 {
 
 /* Link styles */
 .label a {
-    color: #333; /* Link color */
+    color: #333;
     text-decoration: none;
 }
 

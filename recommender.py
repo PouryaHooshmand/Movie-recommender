@@ -1,13 +1,9 @@
-# Contains parts from: https://flask-user.readthedocs.io/en/latest/quickstart_app.html
-
 from flask import Flask, render_template, request, redirect, url_for
 from flask_user import login_required, UserManager, current_user
 
 from models import db, User, Movie, MovieGenre, FavoriteGenres, Genre, Rating
 from read_data import check_and_read_data
-import re
 from get_recommendations import *
-import time
 
 
 class CustomUserManager(UserManager):
@@ -74,7 +70,6 @@ def initdb_command():
     check_and_read_data(db)
     print('Initialized the database.')
 
-# The Home page is accessible to anyone
 @app.route('/')
 def home_page():
     is_logged_in = isinstance(current_user, User)
@@ -102,7 +97,6 @@ def home_page():
         for m in movies[:5]:
             rating = [r.rating for r in m.ratings]
             rated_movies[m] = (len(rating), round(sum(rating)/len(rating),1))
-    # render home.html template
     return render_template("home.html", top_movies = top_movies, top_cat_movies = top_cat_movies, rated_movies = rated_movies)
 
 @app.route("/welcome")
@@ -134,15 +128,12 @@ def results_page():
     return render_template("movies.html", movies=ratings)
 
 
-# The Members page is only accessible to authenticated users via the @login_required decorator
 @app.route('/movies')
 @login_required  # User must be authenticated
 def movies_page():
-    # String-based templates
     fav_genres = [g.genre_id for g in FavoriteGenres.query.filter(FavoriteGenres.user_id==current_user.id).all()]
     if not fav_genres:
         fav_genres = [g.id for g in Genre.query.all()]
-    # first 10 movies
     ratings = {}
     
     if Rating.query.filter(Rating.user_id==current_user.id).first():
@@ -150,12 +141,10 @@ def movies_page():
 
         df = pd.DataFrame.from_records(all_ratings, columns=['user_id', 'movie_id', 'rating'])
 
-        t=time.time()
         init_movie_list = [int(_) for _ in get_recommendations_user(df, current_user.id)]
         init_movie_list = init_movie_list[:int(len(init_movie_list)/5)]
         all_ratings = Rating.query.filter(Rating.movie_id.in_(init_movie_list)).with_entities(Rating.user_id, Rating.movie_id, Rating.rating).all()
         df = pd.DataFrame.from_records(all_ratings, columns=['user_id', 'movie_id', 'rating'])
-        #print(time.time()-t)
 
         movie_ranking = [int(_) for _ in get_recommendations_item(df, current_user.id)]
         i = 0
@@ -190,22 +179,12 @@ def movies_page():
         common_genres, ratings = zip(*sorted(zip(common_genres,ratings.items()), key= lambda i:i[1][1][1], reverse=True))
         ratings = dict([x for _, x in sorted(zip(common_genres,ratings), key= lambda i:i[0], reverse=True)])
 
-    # only Romance movies
-    # movies = Movie.query.filter(Movie.genres.any(MovieGenre.genre == 'Romance')).limit(10).all()
-
-    # only Romance AND Horror movies
-    # movies = Movie.query\
-    #     .filter(Movie.genres.any(MovieGenre.genre == 'Romance')) \
-    #     .filter(Movie.genres.any(MovieGenre.genre == 'Horror')) \
-    #     .limit(10).all()
     return render_template("movies.html", movies=ratings)
 
 
 @app.route('/rated_movies')
-@login_required  # User must be authenticated
+@login_required
 def rated_movies_page():
-    # String-based templates
-    # first 10 movies
     ratings = {}
     
     movies = reversed([Movie.query.get(mid) for mid in [r.movie_id for r in current_user.ratings]])
@@ -214,15 +193,6 @@ def rated_movies_page():
         user_rating = [r.rating for r in m.ratings if r.user_id==current_user.id][0]
         ratings[m] = (len(rating), round(sum(rating)/len(rating),1), user_rating)
     
-
-    # only Romance movies
-    # movies = Movie.query.filter(Movie.genres.any(MovieGenre.genre == 'Romance')).limit(10).all()
-
-    # only Romance AND Horror movies
-    # movies = Movie.query\
-    #     .filter(Movie.genres.any(MovieGenre.genre == 'Romance')) \
-    #     .filter(Movie.genres.any(MovieGenre.genre == 'Horror')) \
-    #     .limit(10).all()
     return render_template("rated_movies.html", movies=ratings)
 
 
@@ -282,8 +252,6 @@ def rate_movie():
     db.session.commit()
 
     return {'message':'rating updated successfully'}, 200
-
-
 
 # Start development web server
 if __name__ == '__main__':

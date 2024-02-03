@@ -45,7 +45,6 @@ def get_recommendations_item(movie_ratings, target_user):
         ans[i] = rating_sum/(similarity_sum*ratings.shape[0])
 
 
-    #print([i for i in reversed(sorted(ans))][:10])
     top_movie_idx = np.argsort(ans)[::-1]
     return list(movies[top_movie_idx])
 
@@ -86,6 +85,5 @@ def get_recommendations_user(movie_ratings, target_user):
         similarity_sum += similarity_list[i]
 
     ans /= (similarity_sum*ratings.shape[0])
-    #print([i for i in reversed(sorted(ans))][:10])
     top_movie_idx = np.argsort(ans)[::-1]
     return list(movies[top_movie_idx])
